@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>時間割作成ツール</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>時間割作成ツール</h1>
+
+    <form id="settings-form">
+        <div class="settings-box">
+            <h2>スケジュール設定</h2>
+            <label for="schedule-dates">授業日（カンマ区切り, 例: 2025-07-01,2025-07-02）</label><br>
+            <input type="text" id="schedule-dates" class="large-input" required>
+            
+            <label for="schedule-slots">1日のコマ（カンマ区切り, 例: 1限,2限,3限）</label><br>
+            <input type="text" id="schedule-slots" class="large-input" required>
+        </div>
+
+        <div class="settings-box">
+            <h2>生徒情報</h2>
+            <div id="students-container">
+                </div>
+            <button type="button" id="add-student-btn" class="small-btn">＋ 生徒を追加</button>
+        </div>
+        
+        <hr>
+        <button type="submit" class="main-btn">時間割を作成</button>
+        <button type="button" id="save-btn" class="secondary-btn">設定を保存</button>
+        <button type="button" id="load-btn" class="secondary-btn">設定を読込</button>
+    </form>
+    
+    <h2>生成結果</h2>
+    <div id="student-filter-container"></div>
+    <div id="summary-container"></div>
+    <div id="loading" style="display: none;">生成中...</div>
+    <div id="result-area"></div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

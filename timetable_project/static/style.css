@@ -1,0 +1,160 @@
+body {
+    font-family: sans-serif;
+    line-height: 1.6;
+    margin: 20px;
+}
+h1, h2 {
+    color: #333;
+}
+form {
+    margin-bottom: 20px;
+}
+button {
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+button:hover {
+    background-color: #0056b3;
+}
+#result-area table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+#result-area th, #result-area td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+#result-area th {
+    background-color: #f2f2f2;
+}
+
+body { font-family: sans-serif; line-height: 1.6; margin: 20px; color: #333; }
+h1, h2 { color: #333; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+input, select { padding: 8px; margin: 4px 0; border: 1px solid #ccc; border-radius: 4px; }
+.large-input { width: 90%; }
+
+.settings-box { background-color: #f9f9f9; border: 1px solid #ddd; border-radius: 8px; padding: 20px; margin-bottom: 20px; }
+
+.student-box { border: 1px solid #ccc; border-radius: 4px; padding: 15px; margin-top: 15px; }
+.student-header { display: flex; justify-content: space-between; align-items: center; }
+.student-name { font-weight: bold; font-size: 1.1em; }
+.lesson-row { display: flex; gap: 10px; align-items: center; margin-top: 5px; }
+
+.main-btn { padding: 12px 20px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 1.1em; }
+.main-btn:hover { background-color: #0056b3; }
+.small-btn { padding: 5px 10px; background-color: #6c757d; color: white; border: none; border-radius: 4px; cursor: pointer; }
+.small-btn:hover { background-color: #5a6268; }
+.remove-student-btn, .remove-lesson-btn { background-color: #dc3545; }
+.remove-student-btn:hover, .remove-lesson-btn:hover { background-color: #c82333; }
+
+#result-area table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+#result-area th, #result-area td { border: 1px solid #ddd; padding: 8px; text-align: left; vertical-align: top; }
+#result-area th { background-color: #f2f2f2; }
+.error-message { color: red; font-weight: bold; }
+.secondary-btn {
+    padding: 12px 20px;
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1.1em;
+}
+.secondary-btn:hover {
+    background-color: #5a6268;
+}
+
+/* 属性ごとの色分けスタイル */
+.lesson-badge {
+    display: block;
+    padding: 4px;
+    margin-bottom: 4px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+}
+
+.lesson-type-対面 {
+    background-color: #e0f7fa; /* 水色系 */
+}
+
+.lesson-type-ss {
+    background-color: #f1e682; /* 黄色系 */
+}
+
+.lesson-type-高校対面 {
+    background-color: #e7769c; /* ピンク系 */
+}
+/* 生徒フィルターとハイライトのスタイル */
+#student-filter-container {
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.filter-btn {
+    padding: 6px 12px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    border: 1px solid #ccc;
+    background-color: #f7f7f7;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.filter-btn:hover {
+    background-color: #e0e0e0;
+}
+
+.filter-btn.active {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+/* 時間割テーブルのハイライト/ディム効果 */
+.lesson-badge {
+    display: block;
+    padding: 4px;
+    margin-bottom: 4px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    transition: opacity 0.3s ease; /* スムーズな切り替え効果を追加 */
+}
+
+.lesson-badge.dimmed {
+    opacity: 0.2; /* 半透明にする */
+}
+
+/* 統計情報セクションのスタイル */
+#summary-container {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+}
+
+#summary-container h3 {
+    margin-top: 0;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 5px;
+}
+
+#summary-container .summary-section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+#summary-container ul {
+    list-style-type: none;
+    padding-left: 0;
+    margin-top: 5px;
+}
