@@ -25,7 +25,7 @@ class TimetableGenerator:
         return students
 
     def _create_lesson_list(self):
-        # OR-Toolsでは単純なリストでOK
+        # OR-Tools
         lessons = []
         for student_name, data in self.students_data.items():
             for lesson_info in data['lessons']:
@@ -136,7 +136,6 @@ class TimetableGenerator:
                     model.AddBoolAnd([has_lesson_on_day[(student_name, d1)], has_lesson_on_day[(student_name, d2)], has_lesson_on_day[(student_name, d3)]]).OnlyEnforceIf(is_3_days_in_a_row)
                     penalties.append(is_3_days_in_a_row * penalty_weight_3_days)
         
-        # --- ▼▼▼ 今回の追加部分 ▼▼▼ ---
         # [S3] 2コマ以上空きへのペナルティ
         penalty_weight_2_slots_gap = 100
         for student_name in self.all_student_names:
@@ -152,7 +151,6 @@ class TimetableGenerator:
                         lesson_at_slot[(student_name, date, s_idx + 2)].Not()
                     ]).OnlyEnforceIf(has_2_slot_gap)
                     penalties.append(has_2_slot_gap * penalty_weight_2_slots_gap)
-        # --- ▲▲▲ 追加部分ここまで ▲▲▲ ---
         
         model.Minimize(sum(penalties))
 

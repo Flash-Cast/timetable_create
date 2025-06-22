@@ -4,16 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>時間割作成ツール</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://npmcdn.com/flatpickr/dist/l10n/ja.js"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>時間割作成ツール</h1>
+    <h1>季節講習時間割作成</h1>
+    <h2>創英ゼミナール</h2>
 
     <form id="settings-form">
         <div class="settings-box">
             <h2>スケジュール設定</h2>
             <label for="schedule-dates">授業日（カンマ区切り, 例: 2025-07-01,2025-07-02）</label><br>
-            <input type="text" id="schedule-dates" class="large-input" required>
+            <input type="text" id="schedule-dates" class="large-input" required><br>
             
             <label for="schedule-slots">1日のコマ（カンマ区切り, 例: 1限,2限,3限）</label><br>
             <input type="text" id="schedule-slots" class="large-input" required>
@@ -30,14 +36,24 @@
         <button type="submit" class="main-btn">時間割を作成</button>
         <button type="button" id="save-btn" class="secondary-btn">設定を保存</button>
         <button type="button" id="load-btn" class="secondary-btn">設定を読込</button>
+        <button type="button" id="export-csv-btn" class="secondary-btn" disabled>CSV形式でエクスポート</button>
     </form>
     
     <h2>生成結果</h2>
-    <div id="student-filter-container"></div>
+    <div class="filter-controls">
+        <input type="text" id="student-search-input" placeholder="生徒名を検索...">
+        <div id="student-filter-container">
+    </div>
     <div id="summary-container"></div>
     <div id="loading" style="display: none;">生成中...</div>
     <div id="result-area"></div>
 
     <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+    <footer>
+        <small>
+        Copyright © 2025 Ryuta Tsukui All Rights Reserved.
+        </small>
+    </footer>
 </body>
 </html>

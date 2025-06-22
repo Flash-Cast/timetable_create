@@ -158,3 +158,23 @@ input, select { padding: 8px; margin: 4px 0; border: 1px solid #ccc; border-radi
     padding-left: 0;
     margin-top: 5px;
 }
+/* フィルターコントロールのスタイル */
+.filter-controls {
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+#student-search-input {
+    width: 250px;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+footer {
+  text-align: center;
+  padding: 5px;
+  background-color: #569ee6;
+  color: #000000;
+}

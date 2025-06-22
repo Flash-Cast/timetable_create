@@ -7,7 +7,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const loadBtn = document.getElementById('load-btn');
     const studentFilterContainer = document.getElementById('student-filter-container');
     const summaryContainer = document.getElementById('summary-container');
+    const exportCsvBtn = document.getElementById('export-csv-btn');
+    const studentSearchInput = document.getElementById('student-search-input'); 
     let studentIdCounter = 0;
+    let latestSchedule = null;
+    
+    // Flatpickrを日付入力欄（ID: schedule-dates）に適用
+    flatpickr("#schedule-dates", {
+        mode: "multiple",      // 複数日の選択を許可
+        dateFormat: "Y-m-d",   // 日付のフォーマットを指定 (例: 2025-07-22)
+        locale: "ja",          // 表示を日本語化
+        onChange: function(selectedDates, dateStr, instance) {
+            // カンマ区切りではなく、", " で区切るように整形
+            instance.input.value = selectedDates.map(date => instance.formatDate(date, "Y-m-d")).join(', ');
+        }
+    });
 
     // --- 関数定義 ---
 
@@ -154,7 +168,66 @@ document.addEventListener('DOMContentLoaded', () => {
         summaryContainer.innerHTML = summaryHtml;
     }
 
+    /**
+     * スケジュールオブジェクトをCSV文字列に変換する関数
+     * @param {object} schedule スケジュールデータ
+     * @param {string[]} slots 1日のコマ名の配列
+     * @returns {string} CSV形式の文字列
+     */
+    function convertScheduleToCsv(schedule, slots) {
+        // ヘッダー行を作成
+        const header = ['日付', ...slots];
+        const rows = [header.join(',')];
+
+        // データ行を作成
+        Object.keys(schedule).sort().forEach(date => {
+            const row = [date];
+            slots.forEach(slot => {
+                const lessons = schedule[date][slot];
+                // 1つのセルに複数ある場合は改行で区切る
+                const cellContent = lessons.map(l => {
+                    let baseName = l.lesson_name;
+                    const lastUnderscoreIndex = l.lesson_name.lastIndexOf('_');
+                    if (lastUnderscoreIndex > -1) {
+                        const suffix = l.lesson_name.substring(lastUnderscoreIndex + 1);
+                        if (!isNaN(parseInt(suffix))) {
+                            baseName = l.lesson_name.substring(0, lastUnderscoreIndex);
+                        }
+                    }
+                    return `${l.student}(${baseName})`;
+                }).join('\n'); // Excelでセル内改行になるようLF(\n)を使用
+
+                // セル内に改行やカンマが含まれる可能性があるので、ダブルクォートで囲む
+                row.push(`"${cellContent.replace(/"/g, '""')}"`);
+            });
+            rows.push(row.join(','));
+        });
+
+        // BOMを先頭に付けてExcelでの文字化けを防ぐ
+        return '\uFEFF' + rows.join('\n');
+    }
+
     // --- イベントリスナー設定 ---
+
+    // ▼▼▼ 生徒検索ボックスの入力
+    studentSearchInput.addEventListener('input', (event) => {
+        const searchTerm = event.target.value.toLowerCase();
+        const studentButtons = studentFilterContainer.querySelectorAll('.filter-btn');
+
+        studentButtons.forEach(button => {
+            // 「全員表示」ボタンは常に表示
+            if (button.dataset.studentFilter === 'all') {
+                return;
+            }
+
+            const studentName = button.textContent.toLowerCase();
+            if (studentName.includes(searchTerm)) {
+                button.style.display = 'inline-block'; // 一致すれば表示
+            } else {
+                button.style.display = 'none'; // 一致しなければ非表示
+            }
+        });
+    });
 
     // 「生徒を追加」ボタン
     addStudentBtn.addEventListener('click', () => {
@@ -183,6 +256,11 @@ document.addEventListener('DOMContentLoaded', () => {
             alert('生徒を1人以上登録してください。');
             return;
         }
+
+        // 処理開始時にボタンを無効化
+        exportCsvBtn.disabled = true;
+        latestSchedule = null;
+
         const loadingDiv = document.getElementById('loading');
         const resultArea = document.getElementById('result-area');
         summaryContainer.innerHTML = '';
@@ -198,6 +276,10 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             const result = await response.json();
             if (response.ok && result.success) {
+                // 成功時に結果を保存し、CSV保存ボタンを有効化
+                latestSchedule = result.schedule;
+                exportCsvBtn.disabled = false;
+
                 displaySchedule(result.schedule, schedule_info.slots_per_day);
                 displaySummary(result.schedule);
             } else {
@@ -209,6 +291,25 @@ document.addEventListener('DOMContentLoaded', () => {
         } finally {
             loadingDiv.style.display = 'none';
         }
+    });
+
+    // ▼▼▼ CSVエクスポートボタンの処理 ▼▼▼
+    exportCsvBtn.addEventListener('click', () => {
+        if (!latestSchedule) {
+            alert('エクスポートする時間割がありません。');
+            return;
+        }
+        const scheduleData = collectDataFromForm();
+        const csvContent = convertScheduleToCsv(latestSchedule, scheduleData.schedule_info.slots_per_day);
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'schedule.csv';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
     });
 
     // 「設定を保存」ボタン
